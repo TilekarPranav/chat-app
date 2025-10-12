@@ -5,7 +5,7 @@ import { AuthContext } from '../../Context/AuthContext'
 
 const RightSidebar = () => {
   const { selectedUser, messages } = useContext(ChatContext)
-  const { logout, onlineUser } = useContext(AuthContext) // ✅ fixed: onlineUser (not onlineUsers)
+  const { logout, onlineUser } = useContext(AuthContext) 
 
   const [msgImages, setMsgImages] = useState([])
 
@@ -25,7 +25,7 @@ const RightSidebar = () => {
             className='w-20 aspect-[1/1] rounded-full'
           />
           <h1 className='px-10 text-xl font-medium mx-auto flex items-center gap-2'>
-            {onlineUser?.includes(selectedUser._id) && ( // ✅ optional chaining prevents crash
+            {onlineUser?.includes(selectedUser._id) && ( 
               <p className='w-2 h-2 rounded-full bg-green-500'></p>
             )}
             {selectedUser.fullName}

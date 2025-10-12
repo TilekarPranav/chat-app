@@ -12,7 +12,6 @@ export const ChatProvider = ({ children }) => {
 
   const { socket, axios } = useContext(AuthContext);
 
-  // ✅ Get all users with unseen count
   const getUser = async () => {
     try {
       const { data } = await axios.get("/api/messages/users");
@@ -25,7 +24,6 @@ export const ChatProvider = ({ children }) => {
     }
   };
 
-  // ✅ Fetch chat messages
   const getMessages = async () => {
     if (!selectedUser) return;
     try {
@@ -33,7 +31,6 @@ export const ChatProvider = ({ children }) => {
       if (data.success) {
         setMessages(data.messages);
 
-        // reset unseen count for this user
         setUnseenMessages((prev) => ({ ...prev, [selectedUser._id]: 0 }));
       }
     } catch (error) {
@@ -41,7 +38,6 @@ export const ChatProvider = ({ children }) => {
     }
   };
 
-  // ✅ Send message
   const sendMessages = async (messageData) => {
     if (!selectedUser) return;
     try {
@@ -51,10 +47,9 @@ export const ChatProvider = ({ children }) => {
       );
 
       if (data.success) {
-        // 👇 Fix: backend returns newMessage not newMessages
         setMessages((prevMessages) => [
           ...prevMessages,
-          { ...data.newMessage, seen: true } // mark own msg seen
+          { ...data.newMessage, seen: true }
         ]);
       } else {
         toast.error(data.message);
@@ -64,19 +59,16 @@ export const ChatProvider = ({ children }) => {
     }
   };
 
-  // ✅ Listen for incoming messages
   const subscribeToMessages = () => {
     if (!socket) return;
 
     socket.on("newMessage", (newMessage) => {
       if (selectedUser && newMessage.senderId === selectedUser._id) {
-        // you are chatting with the sender → append and mark as seen
         newMessage.seen = true;
         setMessages((prevMessages) => [...prevMessages, newMessage]);
 
         axios.put(`/api/messages/mark/${newMessage._id}`);
       } else {
-        // message from another user → increase unseen count
         setUnseenMessages((prev) => ({
           ...prev,
           [newMessage.senderId]: prev[newMessage.senderId]

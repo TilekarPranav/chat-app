@@ -3,7 +3,6 @@ import User from "../Models/UserModel.js";
 import { generateToken } from "../Lib/Utils.js";
 import cloud from "../Lib/Cloud.js";
 
-// Signup
 export const signup = async (req, res) => {
   try {
     const { fullName, email, password, bio } = req.body;

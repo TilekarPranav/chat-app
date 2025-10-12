@@ -3,7 +3,6 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 
-// ✅ Use env OR fallback to proxy "/"
 const backendUrl = import.meta.env.VITE_URL || "/";
 axios.defaults.baseURL = backendUrl;
 
@@ -15,7 +14,6 @@ export const AuthProvider = ({ children }) => {
   const [onlineUser, setOnlineUser] = useState([]);
   const [socket, setSocket] = useState(null);
 
-  // 🔹 Global axios interceptor for 401
   useEffect(() => {
     const interceptor = axios.interceptors.response.use(
       (res) => res,
@@ -31,7 +29,6 @@ export const AuthProvider = ({ children }) => {
     };
   }, []);
 
-  // 🔹 Check authentication status
   const checkAuth = async () => {
     try {
       const { data } = await axios.get("/api/auth/check-auth");
@@ -44,7 +41,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // 🔹 Login (signup/login handled by "state")
   const login = async (state, credentials) => {
     try {
       const { data } = await axios.post(`/api/auth/${state}`, credentials);
@@ -52,7 +48,6 @@ export const AuthProvider = ({ children }) => {
         setAuthUser(data.user);
         connectSocket(data.user);
 
-        // ✅ Store JWT in headers
         axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
         setToken(data.token);
         localStorage.setItem("token", data.token);
@@ -66,7 +61,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // 🔹 Logout
   const logout = () => {
     localStorage.removeItem("token");
     setToken(null);
@@ -77,7 +71,6 @@ export const AuthProvider = ({ children }) => {
     toast.success("Logged out successfully");
   };
 
-  // 🔹 Update profile
   const updateProfile = async (body) => {
     try {
       const { data } = await axios.put("/api/auth/update-profile", body);
@@ -90,7 +83,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // 🔹 Connect to Socket.io
   const connectSocket = (userData) => {
     if (!userData || socket?.connected) return;
     const newSocket = io(import.meta.env.VITE_URL || "http://localhost:5000", {
@@ -102,7 +94,6 @@ export const AuthProvider = ({ children }) => {
     });
   };
 
-  // 🔹 On mount, restore token
   useEffect(() => {
     if (token) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;

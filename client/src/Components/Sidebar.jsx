@@ -12,7 +12,6 @@ const Sidebar = () => {
 
   const [input, setInput] = useState("");
 
-  // ✅ fix: toLowerCase().includes
   const filterUsers = input
     ? user.filter((u) => u.fullName.toLowerCase().includes(input.toLowerCase()))
     : user;
@@ -60,7 +59,7 @@ const Sidebar = () => {
           <div
             onClick={() => {
               setSelectedUser(u);
-              setUnseenMessages((prev) => ({ ...prev, [u._id]: 0 })); // ✅ fix typo (preview -> prev, user._id -> u._id)
+              setUnseenMessages((prev) => ({ ...prev, [u._id]: 0 }));
             }}
             key={u._id || index}
             className={`relative flex items-center gap-2 p-2 pl-4 rounded cursor-pointer max-sm:text-sm ${

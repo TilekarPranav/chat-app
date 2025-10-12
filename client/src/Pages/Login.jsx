@@ -16,12 +16,11 @@ const Login = () => {
     e.preventDefault()
 
     if (state === "Sign Up" && !submitted) {
-      setSubmitted(true) // show bio field on second step
+      setSubmitted(true) 
       return
     }
 
     login(state === "Sign Up" ? 'signup' : 'login',{fullName,email,password,bio})
-    // Final form submit (you can add API call here)
     console.log({
       fullName,
       email,
@@ -33,10 +32,8 @@ const Login = () => {
 
   return (
     <div className='min-h-screen bg-cover bg-center flex items-center justify-center gap-8 sm:justify-evenly max-sm:flex-col backdrop-blur-2xl'>
-      {/* Left Logo */}
       <img src={assets.logo_big} alt='' className='w-[min(30vw,250px)]' />
 
-      {/* Right Form */}
       <form 
         onSubmit={onSubmitHandeler} 
         className='border-2 bg-white/10 text-white border-gray-500 p-6 flex flex-col gap-6 rounded-lg shadow-lg w-[min(90%,400px)]'
@@ -53,7 +50,6 @@ const Login = () => {
           )}
         </h2>
 
-        {/* Full Name - only on Sign Up and before bio step */}
         {state === "Sign Up" && !submitted && (
           <input 
             onChange={(e) => setFullName(e.target.value)} 
@@ -65,7 +61,6 @@ const Login = () => {
           />
         )}
 
-        {/* Email + Password - hide when bio step is active */}
         {!submitted && (
           <>
             <input 
@@ -87,7 +82,6 @@ const Login = () => {
           </>
         )}
 
-        {/* Bio - shown on second step of Sign Up */}
         {state === "Sign Up" && submitted && (
           <textarea 
             onChange={(e) => setBio(e.target.value)} 
@@ -99,7 +93,6 @@ const Login = () => {
           ></textarea>
         )}
 
-        {/* Submit Button */}
         <button 
           type='submit' 
           className='py-3 bg-gradient-to-r from-purple-400 to-violet-600 text-white rounded-md cursor-pointer'
@@ -107,7 +100,6 @@ const Login = () => {
           {state === "Sign Up" ? (submitted ? "Finish Sign Up" : "Next") : "Login Now"}
         </button>
 
-        {/* Terms */}
         {!submitted && (
           <div className='flex items-center gap-2 text-sm text-gray-400'>
             <input type='checkbox' required />
@@ -115,7 +107,6 @@ const Login = () => {
           </div>
         )}
 
-        {/* Toggle Login / Sign Up */}
         <div className='flex flex-col gap-2 text-sm text-gray-300'>
           {state === "Sign Up" ? (
             <p>
